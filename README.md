@@ -16,7 +16,7 @@ We can read a file out loud from the command line.
 For example, with the OpenAI API:
 
 ```sh
-$ OPENAI_KEY="$(cat /path/to/key)"; cat myfile.txt | ata --tts | vlc - --intf dummy
+$ OPENAI_KEY="$(cat /path/to/key)"; cat myfile.txt | ata tts | vlc - --intf dummy
 ```
 
 Here, we set the key, print the file `myfile.txt` to stdout, pipe it to `ata` to generate mp3 audio, and pipe that to `vlc` to play it.
@@ -33,7 +33,7 @@ set -euo pipefail
 
 export OPENAI_KEY="$(cat /path/to/key)"
 
-ata --tts | vlc - --intf dummy
+ata tts | vlc - --intf dummy
 ```
 
 After adding `spk.sh` to your PATH, you can use it like this:
@@ -45,10 +45,10 @@ $ cat myfile.txt | spk
 ### Other Text to Speech
 
 ```sh
-$ DEEPINFRA_KEY="$(cat /path/to/key)"; cat myfile.txt | ata --tts | vlc -
+$ DEEPINFRA_KEY="$(cat /path/to/key)"; cat myfile.txt | ata tts | vlc -
 ```
 
 ```sh
-$ DEEPINFRA_KEY="$(cat /path/to/key)"; cat myfile.txt | ata --tts --output myfile.mp3
+$ DEEPINFRA_KEY="$(cat /path/to/key)"; cat myfile.txt | ata tts --output myfile.mp3
 ```
 

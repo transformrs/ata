@@ -13,7 +13,7 @@ fn unexpected_argument() -> Result<(), Box<dyn std::error::Error>> {
     cmd.arg("foobar");
     cmd.assert()
         .failure()
-        .stderr(predicate::str::contains("unexpected argument"));
+        .stderr(predicate::str::contains("unrecognized subcommand"));
 
     Ok(())
 }
@@ -54,7 +54,7 @@ fn tts_no_args_output() -> Result<(), Box<dyn std::error::Error>> {
     let dir = tempfile::tempdir().unwrap();
     let mut cmd = ata();
     let key = load_key(&Provider::DeepInfra);
-    cmd.arg("--tts")
+    cmd.arg("tts")
         .arg("--output")
         .arg("output.mp3")
         .env("DEEPINFRA_KEY", key)
@@ -74,15 +74,12 @@ fn tts_no_args() -> Result<(), Box<dyn std::error::Error>> {
     let dir = tempfile::tempdir().unwrap();
     let mut cmd = ata();
     let key = load_key(&Provider::DeepInfra);
-    let cmd = cmd.arg("--tts")
+    let cmd = cmd
+        .arg("tts")
         .env("DEEPINFRA_KEY", key)
         .write_stdin("Hello world")
         .current_dir(&dir);
-    let output = cmd.assert()
-        .success()
-        .get_output()
-        .stdout
-        .clone();
+    let output = cmd.assert().success().get_output().stdout.clone();
 
     assert!(output.len() > 0);
 
