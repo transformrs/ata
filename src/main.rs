@@ -1,5 +1,7 @@
 use clap::Parser;
+use std::fs::File;
 use std::io::Read;
+use std::io::Write;
 use transformrs::Key;
 use transformrs::Provider;
 
@@ -24,7 +26,6 @@ struct Arguments {
 }
 
 enum Task {
-    Chat,
     TTS,
 }
 
@@ -53,7 +54,6 @@ fn default_voice(provider: &Provider) -> Option<String> {
 fn default_model(provider: &Provider, task: &Task) -> Option<String> {
     match provider {
         Provider::OpenAI => match task {
-            Task::Chat => Some("gpt-4o".to_string()),
             Task::TTS => Some("tts-1".to_string()),
         },
         _ => None,
@@ -67,7 +67,6 @@ async fn main() {
     let mut input = String::new();
     std::io::stdin().read_to_string(&mut input).unwrap();
 
-    // TODO: add logic to transformrs to just get the key without .env file.
     let keys = transformrs::load_keys(".env");
     let key = find_single_key(keys);
     let provider = key.provider.clone();
@@ -82,6 +81,11 @@ async fn main() {
             .unwrap()
             .structured()
             .unwrap();
+        let bytes = resp.audio.clone();
+        let ext = resp.file_format;
+        let filename = format!("output.{ext}");
+        let mut file = File::create(filename).unwrap();
+        file.write_all(&bytes).unwrap();
     } else {
         error_and_exit("No action specified.");
     }

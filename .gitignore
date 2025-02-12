@@ -2,3 +2,4 @@
 **/*.rs.bk
 ata.toml
 Cargo.lock
+test.env

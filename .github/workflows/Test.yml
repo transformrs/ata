@@ -23,4 +23,11 @@ jobs:
         with:
           prefix-key: 'test'
 
+      - run: |
+          echo "OPENAI_KEY=${{ secrets.OPENAI_KEY }}" > test.env
+          echo "DEEPINFRA_KEY=${{ secrets.DEEPINFRA_KEY }}" >> test.env
+
       - run: cargo test --all-features
+
+      - name: Cleanup before Post Run
+        run: rm test.env
