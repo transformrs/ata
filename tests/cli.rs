@@ -39,18 +39,13 @@ fn help() -> Result<(), Box<dyn std::error::Error>> {
 /// ```
 fn load_key(provider: &Provider) -> String {
     fn finder(line: &Result<String, std::io::Error>, provider: &Provider) -> bool {
-        line.as_ref()
-            .unwrap()
-            .starts_with(&provider.key_name())
+        line.as_ref().unwrap().starts_with(&provider.key_name())
     }
     let path = std::path::Path::new("test.env");
     let file = std::fs::File::open(path).expect("Failed to open .env file");
     let reader = std::io::BufReader::new(file);
     let mut lines = reader.lines();
-    let key = lines
-        .find(|line| finder(line, provider))
-        .unwrap()
-        .unwrap();
+    let key = lines.find(|line| finder(line, provider)).unwrap().unwrap();
     key.split("=").nth(1).unwrap().to_string()
 }
 
@@ -58,9 +53,11 @@ fn load_key(provider: &Provider) -> String {
 fn tts_no_args() -> Result<(), Box<dyn std::error::Error>> {
     let dir = tempfile::tempdir().unwrap();
     let mut cmd = ata();
-    let key = load_key(&Provider::OpenAI);
+    let key = load_key(&Provider::DeepInfra);
     cmd.arg("--tts")
-        .env("OPENAI_KEY", key)
+        .arg("--output")
+        .arg("output.mp3")
+        .env("DEEPINFRA_KEY", key)
         .write_stdin("Hello world")
         .current_dir(&dir)
         .assert()

@@ -23,17 +23,21 @@ struct Arguments {
     /// Model to use (optional)
     #[arg(long)]
     model: Option<String>,
+
+    /// Output file (optional)
+    #[arg(long, short = 'o')]
+    output: Option<String>,
 }
 
 enum Task {
+    #[allow(clippy::upper_case_acronyms)]
     TTS,
 }
 
 fn find_single_key(keys: transformrs::Keys) -> Key {
-    // let n = keys.keys.len();
     let keys = keys.keys;
     if keys.len() != 1 {
-        eprintln!("Expected exactly one key, got {}", keys.len());
+        eprintln!("Expected exactly one key, found {}", keys.len());
         std::process::exit(1);
     }
     keys[0].clone()
@@ -82,10 +86,12 @@ async fn main() {
             .structured()
             .unwrap();
         let bytes = resp.audio.clone();
-        let ext = resp.file_format;
-        let filename = format!("output.{ext}");
-        let mut file = File::create(filename).unwrap();
-        file.write_all(&bytes).unwrap();
+        if let Some(output) = args.output {
+            let mut file = File::create(output).unwrap();
+            file.write_all(&bytes).unwrap();
+        } else {
+            std::io::stdout().write_all(&bytes).unwrap();
+        }
     } else {
         error_and_exit("No action specified.");
     }
