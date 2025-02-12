@@ -10,9 +10,9 @@ Settings are done via command line arguments and environment variables.
 
 ## Examples
 
-### Text to Speech
+### Text to Speech and Bash
 
-We can create a script to read a file out loud.
+We can read a file out loud from the command line.
 For example, with the OpenAI API:
 
 ```sh
@@ -23,7 +23,7 @@ Here, we set the key, print the file `myfile.txt` to stdout, pipe it to `ata` to
 The `--intf dummy` is optional; it just prevents `vlc` from opening a GUI.
 
 One way to make this easier to use is to create a Bash script that sets the environment variable and runs the command.
-For example, create a file called `spk.sh` (read: speak) with the following content:
+For example, create a file called `spk.sh` (abbreviation for "speak") with the following content:
 
 ```bash
 #!/usr/bin/env bash
@@ -41,3 +41,14 @@ After adding `spk.sh` to your PATH, you can use it like this:
 ```sh
 $ cat myfile.txt | spk
 ```
+
+### Other Text to Speech
+
+```sh
+$ DEEPINFRA_KEY="$(cat /path/to/key)"; cat myfile.txt | ata --tts | vlc -
+```
+
+```sh
+$ DEEPINFRA_KEY="$(cat /path/to/key)"; cat myfile.txt | ata --tts --output myfile.mp3
+```
+

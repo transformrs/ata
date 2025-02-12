@@ -50,7 +50,7 @@ fn load_key(provider: &Provider) -> String {
 }
 
 #[test]
-fn tts_no_args() -> Result<(), Box<dyn std::error::Error>> {
+fn tts_no_args_output() -> Result<(), Box<dyn std::error::Error>> {
     let dir = tempfile::tempdir().unwrap();
     let mut cmd = ata();
     let key = load_key(&Provider::DeepInfra);
@@ -65,6 +65,26 @@ fn tts_no_args() -> Result<(), Box<dyn std::error::Error>> {
 
     let path = dir.path().join("output.mp3");
     assert!(path.exists());
+
+    Ok(())
+}
+
+#[test]
+fn tts_no_args() -> Result<(), Box<dyn std::error::Error>> {
+    let dir = tempfile::tempdir().unwrap();
+    let mut cmd = ata();
+    let key = load_key(&Provider::DeepInfra);
+    let cmd = cmd.arg("--tts")
+        .env("DEEPINFRA_KEY", key)
+        .write_stdin("Hello world")
+        .current_dir(&dir);
+    let output = cmd.assert()
+        .success()
+        .get_output()
+        .stdout
+        .clone();
+
+    assert!(output.len() > 0);
 
     Ok(())
 }
