@@ -1,8 +1,21 @@
-[workspace]
-resolver = "2"
-members = [
-    "ata"
-]
+[package]
+name = "ata"
+version = "3.0.0"
+edition = "2021"
+authors = ["Rik Huijzer"]
+license = "MIT"
 
-[profile.release.package.ata]
-strip = true
+[dependencies]
+clap = { version = "4.5.4", features = ["derive"] }
+directories = "5.0"
+hyper = { version = "0.14", features = ["full"] }
+hyper-rustls = { version = "0.23" }
+os_str_bytes = { version = "7", features = ["conversions"] }
+rustyline = "14"
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1" }
+tokio = { version = "1", features = ["full"] }
+toml = { version = "0.8" }
+
+[dev-dependencies]
+pretty_assertions = "1"
