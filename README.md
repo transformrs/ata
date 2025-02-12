@@ -33,11 +33,11 @@ set -euo pipefail
 
 export OPENAI_KEY="$(cat /path/to/key)"
 
-cat "$1" | ata --tts | vlc - --intf dummy
+ata --tts | vlc - --intf dummy
 ```
 
 After adding `spk.sh` to your PATH, you can use it like this:
 
 ```sh
-$ spk myfile.txt
+$ cat myfile.txt | spk
 ```

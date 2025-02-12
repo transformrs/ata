@@ -80,12 +80,14 @@ async fn main() {
         config.voice = args.voice.or_else(|| default_voice(&provider));
         config.output_format = Some("mp3".to_string());
         let model = args.model.or_else(|| default_model(&provider, &Task::TTS));
+        eprintln!("Requesting text to speech for text of length {}...", input.len());
         let resp = transformrs::text_to_speech::tts(&key, &config, model.as_deref(), &input)
             .await
             .unwrap()
             .structured()
             .unwrap();
         let bytes = resp.audio.clone();
+        eprintln!("Received audio.");
         if let Some(output) = args.output {
             let mut file = File::create(output).unwrap();
             file.write_all(&bytes).unwrap();
