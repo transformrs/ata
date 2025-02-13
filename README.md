@@ -4,6 +4,38 @@
 
 ## Examples
 
+### Chat in Bash
+
+We can chat straight from the command line.
+For example, via the DeepInfra API:
+
+```sh
+$ DEEPINFRA_KEY="$(cat /path/to/key)"; echo "hi there" | ata chat
+```
+
+This defaults to the `meta-llama/Llama-3.3-70B-Instruct` model.
+We can also create a Bash script to provide some default settings to the chat.
+For example, create a file called `chat.sh` with the following content:
+
+```bash
+#!/usr/bin/env bash
+
+# Exit on (pipe) errors.
+set -euo pipefail
+
+export OPENAI_KEY="$(cat /path/to/key)"
+
+ata chat --model="gpt-4o"
+```
+
+and add it to your PATH.
+Now, we can use it like this:
+
+```sh
+$ echo "This is a test. Respond with 'hello'." | ata chat
+hello
+```
+
 ### Text to Speech in Bash
 
 We can read a file out loud from the command line.

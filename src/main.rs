@@ -1,5 +1,7 @@
+mod chat;
 mod tts;
 
+use chat::ChatArgs;
 use clap::Parser;
 use std::io::Read;
 use transformrs::Key;
@@ -7,6 +9,11 @@ use tts::TextToSpeechArgs;
 
 #[derive(clap::Subcommand)]
 enum Commands {
+    /// OpenAI-compatible chat.
+    ///
+    /// Takes text input from stdin and chats with an AI model.
+    #[command()]
+    Chat(ChatArgs),
     /// Convert text to speech
     ///
     /// Takes text input from stdin and converts it to speech using text-to-speech models.
@@ -50,6 +57,9 @@ async fn main() {
     let key = find_single_key(keys);
 
     match args.command {
+        Commands::Chat(args) => {
+            chat::chat(&args, &key, &input).await;
+        }
         Commands::Tts(args) => {
             tts::tts(&args, &key, &input).await;
         }
