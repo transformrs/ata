@@ -36,9 +36,11 @@ fn default_model(provider: &Provider, task: &Task) -> Option<String> {
 
 pub(crate) async fn tts(args: &TextToSpeechArgs, key: &transformrs::Key, input: &str) {
     let provider = key.provider.clone();
-    let mut config = transformrs::text_to_speech::TTSConfig::default();
-    config.voice = args.voice.clone().or_else(|| default_voice(&provider));
-    config.output_format = Some("mp3".to_string());
+    let config = transformrs::text_to_speech::TTSConfig {
+        voice: args.voice.clone().or_else(|| default_voice(&provider)),
+        output_format: Some("mp3".to_string()),
+        ..Default::default()
+    };
     let model = args
         .model
         .clone()
