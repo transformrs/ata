@@ -24,8 +24,9 @@ jobs:
           prefix-key: 'test'
 
       - run: |
-          echo "OPENAI_KEY=${{ secrets.OPENAI_KEY }}" > test.env
-          echo "DEEPINFRA_KEY=${{ secrets.DEEPINFRA_KEY }}" >> test.env
+          echo "DEEPINFRA_KEY=${{ secrets.DEEPINFRA_KEY }}" > test.env
+          echo "GOOGLE_KEY=${{ secrets.GOOGLE_KEY }}" >> test.env
+          echo "OPENAI_KEY=${{ secrets.OPENAI_KEY }}" >> test.env
 
       - run: cargo test --all-features
 
