@@ -92,6 +92,11 @@ fn tts_no_args_deepinfra() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[test]
+fn tts_no_args_google() -> Result<(), Box<dyn std::error::Error>> {
+    tts_default_settings_helper(&Provider::Google)
+}
+
+#[test]
 fn tts_no_args_openai() -> Result<(), Box<dyn std::error::Error>> {
     tts_default_settings_helper(&Provider::OpenAI)
 }

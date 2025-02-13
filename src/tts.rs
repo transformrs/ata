@@ -16,11 +16,27 @@ pub(crate) struct TextToSpeechArgs {
     /// Output file (optional)
     #[arg(long, short = 'o')]
     output: Option<String>,
+
+    /// Language code (optional)
+    #[arg(long)]
+    language_code: Option<String>,
+
+    /// Output format (optional)
+    #[arg(long)]
+    output_format: Option<String>,
+}
+
+fn default_output_format(provider: &Provider) -> Option<String> {
+    match provider {
+        Provider::DeepInfra => Some("mp3".to_string()),
+        _ => None,
+    }
 }
 
 fn default_voice(provider: &Provider) -> Option<String> {
     match provider {
         Provider::OpenAI => Some("alloy".to_string()),
+        Provider::Google => Some("en-US-Studio-Q".to_string()),
         _ => None,
     }
 }
@@ -34,13 +50,27 @@ fn default_model(provider: &Provider, task: &Task) -> Option<String> {
     }
 }
 
+fn default_language_code(provider: &Provider) -> Option<String> {
+    match provider {
+        Provider::Google => Some("en-US".to_string()),
+        _ => None,
+    }
+}
 pub(crate) async fn tts(args: &TextToSpeechArgs, key: &transformrs::Key, input: &str) {
     let provider = key.provider.clone();
     let config = transformrs::text_to_speech::TTSConfig {
         voice: args.voice.clone().or_else(|| default_voice(&provider)),
-        output_format: Some("mp3".to_string()),
+        output_format: args
+            .output_format
+            .clone()
+            .or_else(|| default_output_format(&provider)),
+        language_code: args
+            .language_code
+            .clone()
+            .or_else(|| default_language_code(&provider)),
         ..Default::default()
     };
+    println!("Config: {:?}", config);
     let model = args
         .model
         .clone()
