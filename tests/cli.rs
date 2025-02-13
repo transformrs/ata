@@ -50,26 +50,6 @@ fn load_key(provider: &Provider) -> String {
 }
 
 #[test]
-fn tts_no_args_output() -> Result<(), Box<dyn std::error::Error>> {
-    let dir = tempfile::tempdir().unwrap();
-    let mut cmd = ata();
-    let key = load_key(&Provider::DeepInfra);
-    cmd.arg("tts")
-        .arg("--output")
-        .arg("output.mp3")
-        .env("DEEPINFRA_KEY", key)
-        .write_stdin("Hello world")
-        .current_dir(&dir)
-        .assert()
-        .success();
-
-    let path = dir.path().join("output.mp3");
-    assert!(path.exists());
-
-    Ok(())
-}
-
-#[test]
 fn tts_no_args() -> Result<(), Box<dyn std::error::Error>> {
     let dir = tempfile::tempdir().unwrap();
     let mut cmd = ata();
@@ -84,4 +64,34 @@ fn tts_no_args() -> Result<(), Box<dyn std::error::Error>> {
     assert!(output.len() > 0);
 
     Ok(())
+}
+
+fn tts_default_settings_helper(provider: &Provider) -> Result<(), Box<dyn std::error::Error>> {
+    let dir = tempfile::tempdir().unwrap();
+    let mut cmd = ata();
+    let key = load_key(provider);
+    let name = provider.key_name();
+    cmd.arg("tts")
+        .arg("--output")
+        .arg("output.mp3")
+        .env(name, key)
+        .write_stdin("Hi")
+        .current_dir(&dir)
+        .assert()
+        .success();
+
+    let path = dir.path().join("output.mp3");
+    assert!(path.exists());
+
+    Ok(())
+}
+
+#[test]
+fn tts_no_args_deepinfra() -> Result<(), Box<dyn std::error::Error>> {
+    tts_default_settings_helper(&Provider::DeepInfra)
+}
+
+#[test]
+fn tts_no_args_openai() -> Result<(), Box<dyn std::error::Error>> {
+    tts_default_settings_helper(&Provider::OpenAI)
 }

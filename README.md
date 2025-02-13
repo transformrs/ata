@@ -2,15 +2,9 @@
 
 <h3 align="center">Use AI in the terminal</h3>
 
-## Philosophy
-
-The philosophy of this project is mainly to not handle state.
-Like curl or ffmpeg, this should make it easier to use in scripts and to share examples online.
-Settings are done via command line arguments and environment variables.
-
 ## Examples
 
-### Text to Speech and Bash
+### Text to Speech in Bash
 
 We can read a file out loud from the command line.
 For example, with the OpenAI API:
@@ -42,7 +36,7 @@ After adding `spk.sh` to your PATH, you can use it like this:
 $ cat myfile.txt | spk
 ```
 
-### Other Text to Speech
+### Other Text to Speech Commands
 
 ```sh
 $ DEEPINFRA_KEY="$(cat /path/to/key)"; cat myfile.txt | ata tts | vlc -
@@ -52,3 +46,8 @@ $ DEEPINFRA_KEY="$(cat /path/to/key)"; cat myfile.txt | ata tts | vlc -
 $ DEEPINFRA_KEY="$(cat /path/to/key)"; cat myfile.txt | ata tts --output myfile.mp3
 ```
 
+## Philosophy
+
+The philosophy of this project is mainly to not handle state.
+Like curl or ffmpeg, this should make it easier to use in scripts and to share examples online.
+Settings are done via command line arguments and environment variables.
