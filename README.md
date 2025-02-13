@@ -4,13 +4,16 @@
 
 ## Examples
 
+- [Chat](#chat-in-bash)
+- [Text to Speech](#text-to-speech-in-bash)
+
 ### Chat in Bash
 
 We can chat straight from the command line.
 For example, via the DeepInfra API:
 
 ```sh
-$ DEEPINFRA_KEY="$(cat /path/to/key)"; echo "hi there" | ata chat
+$ DEEPINFRA_KEY="<KEY>"; echo "hi there" | ata chat
 ```
 
 This defaults to the `meta-llama/Llama-3.3-70B-Instruct` model.
@@ -19,9 +22,6 @@ For example, create a file called `chat.sh` with the following content:
 
 ```bash
 #!/usr/bin/env bash
-
-# Exit on (pipe) errors.
-set -euo pipefail
 
 export OPENAI_KEY="$(cat /path/to/key)"
 
@@ -34,6 +34,33 @@ Now, we can use it like this:
 ```sh
 $ echo "This is a test. Respond with 'hello'." | ata chat
 hello
+```
+
+Or we can run a spellcheck on a file:
+
+```sh
+$ echo "Do you see spelling errors in the following text?"; cat myfile.txt | ata chat
+```
+
+Here is a more complex example.
+For example, create a file called `writing-tips.sh` with the following content:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+export DEEPINFRA_KEY="$(cat /path/to/key)"
+
+PROMPT="
+You are a helpful writing assistant.
+Respond with a few suggestions for improving the text.
+Use plain text only; no markdown.
+
+Here is the text to check:
+
+"
+
+(echo "$PROMPT"; cat README.md) | ata chat --model="deepseek-ai/DeepSeek-R1"
 ```
 
 ### Text to Speech in Bash
