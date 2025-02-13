@@ -56,6 +56,7 @@ fn default_language_code(provider: &Provider) -> Option<String> {
         _ => None,
     }
 }
+
 pub(crate) async fn tts(args: &TextToSpeechArgs, key: &transformrs::Key, input: &str) {
     let provider = key.provider.clone();
     let config = transformrs::text_to_speech::TTSConfig {
@@ -70,7 +71,6 @@ pub(crate) async fn tts(args: &TextToSpeechArgs, key: &transformrs::Key, input: 
             .or_else(|| default_language_code(&provider)),
         ..Default::default()
     };
-    println!("Config: {:?}", config);
     let model = args
         .model
         .clone()
