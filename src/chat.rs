@@ -2,6 +2,7 @@ use std::fs::File;
 use std::io::Write;
 use transformrs::Message;
 use transformrs::Provider;
+use futures_util::stream::StreamExt;
 
 #[derive(clap::Parser)]
 pub(crate) struct ChatArgs {
@@ -42,19 +43,29 @@ pub(crate) async fn chat(args: &ChatArgs, key: &transformrs::Key, input: &str) {
         .clone()
         .unwrap_or_else(|| default_model(&provider));
     let messages = vec![Message::from_str("user", input)];
-    let resp = transformrs::chat::chat_completion(&provider, key, &model, &messages)
-        .await
-        .expect("Chat completion failed");
-    if args.raw_json {
-        let json = resp.raw_value();
-        println!("{}", json.unwrap());
-    }
-    let resp = resp.structured().expect("Could not parse response");
-    let content = resp.choices[0].message.content.clone();
-    if let Some(output) = args.output.clone() {
-        let mut file = File::create(output).unwrap();
-        file.write_all(content.to_string().as_bytes()).unwrap();
+    if args.stream {
+        let mut stream = transformrs::chat::stream_chat_completion(&provider, key, &model, &messages)
+            .await
+            .expect("Streaming chat completion failed");
+        while let Some(resp) = stream.next().await {
+            let msg = resp.choices[0].delta.content.clone().unwrap_or_default();
+            print!("{}", msg);
+        }
     } else {
-        println!("{}", content);
+        let resp = transformrs::chat::chat_completion(&provider, key, &model, &messages)
+            .await
+            .expect("Chat completion failed");
+        if args.raw_json {
+            let json = resp.raw_value();
+            println!("{}", json.unwrap());
+        }
+        let resp = resp.structured().expect("Could not parse response");
+        let content = resp.choices[0].message.content.clone();
+        if let Some(output) = args.output.clone() {
+            let mut file = File::create(output).unwrap();
+            file.write_all(content.to_string().as_bytes()).unwrap();
+        } else {
+            println!("{}", content);
+        }
     }
 }

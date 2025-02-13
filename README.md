@@ -59,8 +59,9 @@ Use plain text only; no markdown.
 Here is the text to check:
 
 "
+MODEL="deepseek-ai/DeepSeek-R1-Distill-Llama-70B"
 
-(echo "$PROMPT"; cat README.md) | ata chat --model="deepseek-ai/DeepSeek-R1"
+(echo "$PROMPT"; cat README.md) | ata chat --model="$MODEL"
 ```
 
 ### Text to Speech in Bash
