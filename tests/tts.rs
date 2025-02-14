@@ -1,13 +1,13 @@
 mod common;
 
-use common::ata;
 use common::load_key;
+use common::trf;
 use predicates::prelude::*;
 use transformrs::Provider;
 
 #[test]
 fn unexpected_argument() -> Result<(), Box<dyn std::error::Error>> {
-    let mut cmd = ata();
+    let mut cmd = trf();
     cmd.arg("foobar");
     cmd.assert()
         .failure()
@@ -18,11 +18,11 @@ fn unexpected_argument() -> Result<(), Box<dyn std::error::Error>> {
 
 #[test]
 fn help() -> Result<(), Box<dyn std::error::Error>> {
-    let mut cmd = ata();
+    let mut cmd = trf();
     cmd.arg("--help");
     cmd.assert()
         .success()
-        .stdout(predicate::str::contains("Usage: ata"));
+        .stdout(predicate::str::contains("Usage: trf"));
 
     Ok(())
 }
@@ -30,7 +30,7 @@ fn help() -> Result<(), Box<dyn std::error::Error>> {
 #[test]
 fn tts_no_args() -> Result<(), Box<dyn std::error::Error>> {
     let dir = tempfile::tempdir().unwrap();
-    let mut cmd = ata();
+    let mut cmd = trf();
     let key = load_key(&Provider::DeepInfra);
     let cmd = cmd
         .arg("tts")
@@ -46,7 +46,7 @@ fn tts_no_args() -> Result<(), Box<dyn std::error::Error>> {
 
 fn tts_default_settings_helper(provider: &Provider) -> Result<(), Box<dyn std::error::Error>> {
     let dir = tempfile::tempdir().unwrap();
-    let mut cmd = ata();
+    let mut cmd = trf();
     let key = load_key(provider);
     let name = provider.key_name();
     cmd.arg("tts")

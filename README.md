@@ -13,7 +13,7 @@ We can chat straight from the command line.
 For example, via the DeepInfra API:
 
 ```sh
-$ DEEPINFRA_KEY="<KEY>"; echo "hi there" | ata chat
+$ DEEPINFRA_KEY="<KEY>"; echo "hi there" | trf chat
 ```
 
 This defaults to the `meta-llama/Llama-3.3-70B-Instruct` model.
@@ -25,21 +25,21 @@ For example, create a file called `chat.sh` with the following content:
 
 export OPENAI_KEY="$(cat /path/to/key)"
 
-ata chat --model="gpt-4o"
+trf chat --model="gpt-4o"
 ```
 
 and add it to your PATH.
 Now, we can use it like this:
 
 ```sh
-$ echo "This is a test. Respond with 'hello'." | ata chat
+$ echo "This is a test. Respond with 'hello'." | trf chat
 hello
 ```
 
 Or we can run a spellcheck on a file:
 
 ```sh
-$ echo "Do you see spelling errors in the following text?"; cat myfile.txt | ata chat
+$ echo "Do you see spelling errors in the following text?"; cat myfile.txt | trf chat
 ```
 
 Here is a more complex example.
@@ -61,7 +61,7 @@ Here is the text to check:
 "
 MODEL="deepseek-ai/DeepSeek-R1-Distill-Llama-70B"
 
-(echo "$PROMPT"; cat README.md) | ata chat --model="$MODEL"
+(echo "$PROMPT"; cat README.md) | trf chat --model="$MODEL"
 ```
 
 ### Text to Speech in Bash
@@ -70,10 +70,10 @@ We can read a file out loud from the command line.
 For example, with the OpenAI API:
 
 ```sh
-$ OPENAI_KEY="$(cat /path/to/key)"; cat myfile.txt | ata tts | vlc - --intf dummy
+$ OPENAI_KEY="$(cat /path/to/key)"; cat myfile.txt | trf tts | vlc - --intf dummy
 ```
 
-Here, we set the key, print the file `myfile.txt` to stdout, pipe it to `ata` to generate mp3 audio, and pipe that to `vlc` to play it.
+Here, we set the key, print the file `myfile.txt` to stdout, pipe it to `trf` to generate mp3 audio, and pipe that to `vlc` to play it.
 The `--intf dummy` is optional; it just prevents `vlc` from opening a GUI.
 
 One way to make this easier to use is to create a Bash script that sets the environment variable and runs the command.
@@ -87,7 +87,7 @@ set -euo pipefail
 
 export OPENAI_KEY="$(cat /path/to/key)"
 
-ata tts | vlc - --intf dummy
+trf tts | vlc - --intf dummy
 ```
 
 After adding `spk.sh` to your PATH, you can use it like this:
@@ -99,11 +99,11 @@ $ cat myfile.txt | spk
 ### Other Text to Speech Commands
 
 ```sh
-$ DEEPINFRA_KEY="$(cat /path/to/key)"; cat myfile.txt | ata tts | vlc -
+$ DEEPINFRA_KEY="$(cat /path/to/key)"; cat myfile.txt | trf tts | vlc -
 ```
 
 ```sh
-$ DEEPINFRA_KEY="$(cat /path/to/key)"; cat myfile.txt | ata tts --output myfile.mp3
+$ DEEPINFRA_KEY="$(cat /path/to/key)"; cat myfile.txt | trf tts --output myfile.mp3
 ```
 
 ## Philosophy
