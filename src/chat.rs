@@ -1,8 +1,8 @@
+use futures_util::stream::StreamExt;
 use std::fs::File;
 use std::io::Write;
 use transformrs::Message;
 use transformrs::Provider;
-use futures_util::stream::StreamExt;
 
 #[derive(clap::Parser)]
 pub(crate) struct ChatArgs {
@@ -44,12 +44,15 @@ pub(crate) async fn chat(args: &ChatArgs, key: &transformrs::Key, input: &str) {
         .unwrap_or_else(|| default_model(&provider));
     let messages = vec![Message::from_str("user", input)];
     if args.stream {
-        let mut stream = transformrs::chat::stream_chat_completion(&provider, key, &model, &messages)
-            .await
-            .expect("Streaming chat completion failed");
+        let mut stream =
+            transformrs::chat::stream_chat_completion(&provider, key, &model, &messages)
+                .await
+                .expect("Streaming chat completion failed");
         while let Some(resp) = stream.next().await {
             let msg = resp.choices[0].delta.content.clone().unwrap_or_default();
             print!("{}", msg);
+            // Ensure the output is printed immediately.
+            std::io::stdout().flush().unwrap();
         }
     } else {
         let resp = transformrs::chat::chat_completion(&provider, key, &model, &messages)
