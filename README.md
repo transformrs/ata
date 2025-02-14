@@ -1,6 +1,6 @@
-<h1 align="center"><code>ata</code>: Ask the Terminal Anything</h1>
+<h1 align="center"><code>trf</code>: Multimodal AI in the terminal</h1>
 
-<h3 align="center">Use AI in the terminal</h3>
+<h3 align="center">Supports OpenAI, DeepInfra, Google, Hyperbolic, and others</h3>
 
 ## Examples
 

@@ -1,6 +1,6 @@
 [package]
-name = "ata"
-version = "3.0.0"
+name = "trf"
+version = "1.0.0"
 edition = "2021"
 authors = ["Rik Huijzer"]
 license = "MIT"
