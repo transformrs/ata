@@ -6,11 +6,13 @@ authors = ["Rik Huijzer"]
 license = "MIT"
 
 [dependencies]
-clap = { version = "4.5.29", features = ["derive"] }
-tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
-transformrs = "0.6"
 anyhow = "1"
+clap = { version = "4.5.29", features = ["derive"] }
 futures-util = "0.3.31"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+tracing-subscriber = "0.3"
+tracing = "0.1"
+transformrs = "0.6"
 
 [dev-dependencies]
 assert_cmd = "2"
